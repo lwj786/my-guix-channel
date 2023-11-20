@@ -1,4 +1,4 @@
-(define-module (gong packages misc)
+(define-module (gong packages uxplay)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system cmake)
