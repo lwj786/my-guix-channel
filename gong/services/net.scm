@@ -1,14 +1,24 @@
 (define-module (gong services net)
   #:use-module (gnu packages vpn)
   #:use-module (gnu services)
+  #:use-module (gnu services configuration)
   #:use-module (gnu services shepherd)
   #:use-module (gnu services networking)
   #:use-module (guix gexp)
   #:export (tinc-service-type
-            v2ray-service-type))
+            tinc-configuration
+
+            v2ray-service-type
+            v2ray-configuration))
 
 
-(define (tinc-shepherd-service conf-dir)
+(define-configuration/no-serialization tinc-configuration
+  (config-dir
+   string
+   "Configuration directory for tinc"))
+
+(define (tinc-shepherd-service config)
+  (define config-dir (tinc-configuration-config-dir config))
   (list
    (shepherd-service
     (provision '(tinc))
@@ -16,7 +26,7 @@
     (requirement '(networking))
     (start #~(make-forkexec-constructor
               (list (string-append #$tinc "/sbin/tincd")
-                    "-c" #$conf-dir
+                    "-c" #$config-dir
                     "-D")))
     (stop #~(make-kill-destructor)))))
 
@@ -29,16 +39,26 @@
    (description "tinc @acronym{VPN, Virtual Private Network}.")))
 
 
-(define (v2ray-shepherd-service bin-conf)
+(define-configuration/no-serialization v2ray-configuration
+  (command
+   string
+   "Path to v2ray")
+  (config-file
+   string
+   "Configuration file for v2ray"))
+
+(define (v2ray-shepherd-service config)
+  (define command (v2ray-configuration-command config))
+  (define config-file (v2ray-configuration-config-file config))
   (list
    (shepherd-service
     (provision '(v2ray))
     (documentation "Run then v2ray proxy.")
     (requirement '(networking))
     (start #~(make-forkexec-constructor
-              (list #$(car bin-conf)
+              (list #$command
                     "-config"
-                    #$(cdr bin-conf))))
+                    #$config-file)))
     (stop #~(make-kill-destructor)))))
 
 (define v2ray-service-type
