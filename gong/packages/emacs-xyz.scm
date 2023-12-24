@@ -49,11 +49,11 @@
 
 
 (define-public emacs-spacious-padding
-  (let ((commit "718db1bd98a17f137b58786255fcc57b2832594b")
+  (let ((commit "9d96d301d5bccf192daaf00dba64bca9979dcb5a")
         (revision "1"))
     (package
      (name "emacs-spacious-padding")
-     (version (git-version "0.2.2" revision commit))
+     (version (git-version "0.3.0" revision commit))
      (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -61,7 +61,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0rhnzl2v2pci0g3mhzaqssfkz80xfcjfzw9rsr7nga819lpllryh"))))
+               (base32 "0i0zabhykj1waz32b3f6486zmjpircc4qkdip7b2hj0hmyr2q9ih"))))
      (build-system emacs-build-system)
      (home-page "https://git.sr.ht/~protesilaos/spacious-padding")
      (synopsis "Increase the padding/spacing of GNU Emacs frames and windows")
@@ -71,7 +71,7 @@
 
 
 (define-public emacs-wolfram
-  (let ((commit "d2e317214bf669dda82fd3202090715e59d29dcf")
+  (let ((commit "743c92f88bb3b6a77bc84ac2221adc6222cebb94")
         (revision "1"))
     (package
      (name "emacs-wolfram")
@@ -83,7 +83,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "08zjb2i100ibgy783ybasmak61m4gkipasyzmarznf3lgbkdj8vb"))))
+               (base32 "12bp7yarsqdg0572mq6n6l12r35ahkrjam2aa8k0ialhwigpbvwm"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/hsjunnesson/wolfram.el")
      (synopsis "Wolfram Alpha integration in Emacs")
