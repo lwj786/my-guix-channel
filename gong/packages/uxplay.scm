@@ -13,7 +13,7 @@
 
 
 (define-public uxplay
-  (let ((commit "ff17dc4230aad64dc4d1ceeb6b72113bf940c7f2")
+  (let ((commit "3de745e53b69eaf12e8ef9d982a688db8c2966e2")
         (revision "1"))
     (package
      (name "uxplay")
@@ -25,7 +25,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0mqk7bbj1ci3szm16kx5snkkkb3npjhfhzad9mg637v1g3d14wgn"))))
+               (base32 "1icfaw7i8fn2avlwy7yqz8zjzw92plm12lw7jk44ksg4jf9l8iya"))))
      (build-system cmake-build-system)
      (arguments `(#:tests? #false))
      (inputs

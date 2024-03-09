@@ -5,7 +5,7 @@
   #:use-module ((guix licenses) #:prefix license:))
 
 (define-public emacs-goto-line-preview
-  (let ((commit "877d65a60cfa1abab55c95574212bdc9fcd6bebe")
+  (let ((commit "4e712da4e5e90b02440bd1f435a89ad02ff5a894")
         (revision "1"))
     (package
      (name "emacs-goto-line-preview")
@@ -17,7 +17,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0mn00f0xjq9q4y28igczvzg2976pl2fzr67fxc2wj0knkbsd9fvf"))))
+               (base32 "0khcc8qgc9x77wr4lpxjjahcimxk015ikp3lin02lm1pp28a5wa5"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/emacs-vs/goto-line-preview")
      (synopsis "Preview line when executing goto-line command")
