@@ -6,7 +6,7 @@
   #:use-module (gnu packages emacs-xyz))
 
 (define-public emacs-goto-line-preview
-  (let ((commit "4e712da4e5e90b02440bd1f435a89ad02ff5a894")
+  (let ((commit "056bd88d860ce9309ba3d4934d9ec5801121683b")
         (revision "1"))
     (package
      (name "emacs-goto-line-preview")
@@ -18,7 +18,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0khcc8qgc9x77wr4lpxjjahcimxk015ikp3lin02lm1pp28a5wa5"))))
+               (base32 "0chjlc3a040bjmgihgr4hb3s6l4x0yicjpafal1cmc88dwshqka0"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/emacs-vs/goto-line-preview")
      (synopsis "Preview line when executing goto-line command")
@@ -28,11 +28,11 @@
 
 
 (define-public emacs-highlight-parentheses
-  (let ((commit "438a1cb2563e2a2496be4678cc0df8d5b22caf5d")
+  (let ((commit "965b18dd69eff4457e17c9e84b3cbfdbfca2ddfb")
         (revision "1"))
     (package
      (name "emacs-highlight-parentheses")
-     (version (git-version "2.1.1" revision commit))
+     (version (git-version "2.2.2" revision commit))
      (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -40,7 +40,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0ixjai9w9x4sm1lx9yljl58r7ydbbjlkb0a2pbv316l8qph8w44r"))))
+               (base32 "0wvhr5gzaxhn9lk36mrw9h4qpdax5kpbhqj44745nvd75g9awpld"))))
      (build-system emacs-build-system)
      (home-page "https://git.sr.ht/~tsdh/highlight-parentheses.el")
      (synopsis "Highlights parentheses surrounding point in Emacs")
@@ -49,12 +49,34 @@
      (license license:gpl3+))))
 
 
+(define-public emacs-maple-translate
+  (let ((commit "252b9f581b6e08b4c0834bee5a294f1cf90e59ce")
+        (revision "1"))
+    (package
+     (name "emacs-maple-translate")
+     (version (git-version "0.0.0" revision commit))
+     (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/honmaple/emacs-maple-translate")
+                    (commit commit)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32 "0bxhy8zcwqgdv80dzrxgccf8xmgd78cvwhqkxqjqdwn507mn1fqj"))))
+     (build-system emacs-build-system)
+     (home-page "https://github.com/honmaple/emacs-maple-translate")
+     (synopsis "Translate word between chinese and english")
+     (description
+      "Translate word between chinese and english.")
+     (license license:gpl3+))))
+
+
 (define-public emacs-pocket-lib
-  (let ((commit "f794e3e619e1f6cad25bbfd5fe019a7e62820bf4")
+  (let ((commit "b13c899223a15481738c3105f07ee2205dcc937c")
         (revision "1"))
     (package
      (name "emacs-pocket-lib")
-     (version (git-version "0.2-pre" revision commit))
+     (version (git-version "0.3-pre" revision commit))
      (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -62,10 +84,10 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0iv03wjwmz0di8n5bndmq5r18r1pq999v1scyay0jm1cxlksqafg"))))
+               (base32 "0b5451fwsjqb603mmgw6kpd8w4gvndg3fxbdb44ib2245ynr5mms"))))
      (build-system emacs-build-system)
      (propagated-inputs
-      (list emacs-request
+      (list emacs-plz
             emacs-dash
             emacs-kv
             emacs-s))
@@ -76,11 +98,11 @@
      (license license:gpl3))))
 
 (define-public emacs-pocket-reader
-  (let ((commit "ef6b6892ef13eff3479d79c7f6bc918dd0444e88")
+  (let ((commit "cb9f6b108ebd3a67f77fb75d85351ffb3b0bb3d4")
         (revision "1"))
     (package
      (name "emacs-pocket-reader")
-     (version (git-version "0.3" revision commit))
+     (version (git-version "0.4-pre" revision commit))
      (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -88,7 +110,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "10zlalqmdrdp46i2hxk1gf0wdqv74x99qq91a8acqjx30jnld9j6"))))
+               (base32 "0d0mfagx43sqrfyshnwm4acvh6h06jl6l11nvppqhb2hdrrdx0ia"))))
      (build-system emacs-build-system)
      (propagated-inputs
       (list emacs-dash

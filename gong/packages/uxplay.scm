@@ -13,11 +13,11 @@
 
 
 (define-public uxplay
-  (let ((commit "3de745e53b69eaf12e8ef9d982a688db8c2966e2")
+  (let ((commit "2c850d0585f056f10aa3be59b6d64ca481853767")
         (revision "1"))
     (package
      (name "uxplay")
-     (version (git-version "1.67" revision commit))
+     (version (git-version "1.68.2" revision commit))
      (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -25,7 +25,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "1icfaw7i8fn2avlwy7yqz8zjzw92plm12lw7jk44ksg4jf9l8iya"))))
+               (base32 "09a1m2akl9yj26jkgfzs5gmkn5krninyvz74qc4fyp5pb4xm655c"))))
      (build-system cmake-build-system)
      (arguments `(#:tests? #false))
      (inputs
