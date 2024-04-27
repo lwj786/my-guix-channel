@@ -5,6 +5,21 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages emacs-xyz))
 
+(define-public emacs-citre-next
+  (let ((commit "b4977c6a63e9879dac913ca8f9fd6faba44650c2")
+        (revision "1"))
+    (package (inherit emacs-citre)
+             (name "emacs-citre-next")
+             (version (git-version "0.4" revision commit))
+             (source (origin
+                       (method git-fetch)
+                       (uri (git-reference
+                             (url "https://github.com/universal-ctags/citre")
+                             (commit commit)))
+                       (file-name (git-file-name name version))
+                       (sha256
+                        (base32 "1yvqmq6ydzvyvy5k1yssfmvapl9c7c0im88kqcfacg2k865j32b5")))))))
+
 (define-public emacs-goto-line-preview
   (let ((commit "056bd88d860ce9309ba3d4934d9ec5801121683b")
         (revision "1"))
