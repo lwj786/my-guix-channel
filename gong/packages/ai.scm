@@ -31,9 +31,9 @@
                    (substitute* "CMakeLists.txt"
                      (("if \\(CHATGLM_ENABLE_EXAMPLES\\)")
                       "if (CHATGLM_ENABLE_EXAMPLES)
-    add_executable(chatglm.cpp main.cpp)
-    target_link_libraries(chatglm.cpp PRIVATE chatglm)
-    install(TARGETS chatglm.cpp)
+    add_executable(chatglm-cpp main.cpp)
+    target_link_libraries(chatglm-cpp PRIVATE chatglm)
+    install(TARGETS chatglm-cpp)
     set(CMAKE_INSTALL_RPATH \"${CMAKE_INSTALL_PREFIX}/lib\")")
                      (("add_executable\\(main main.cpp\\)")
                       "")
