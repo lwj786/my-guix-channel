@@ -52,3 +52,43 @@
               ((#:configure-flags flags '())
                #~(list "-DGGML_OPENBLAS=ON"))))
            (inputs (list openblas))))
+
+
+(define-public llama.cpp
+  (package
+    (name "llama.cpp")
+    (version "b2946")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ggerganov/llama.cpp")
+             (commit version)
+             (recursive? #t)))
+       (sha256
+        (base32 "036nhmcnd50ycqb0j986qfzrxj3qkpnbhbnfh57kzv4gxvxxancc"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list #:tests? #f
+           #:modules '((ice-9 ftw)
+                       (guix build cmake-build-system)
+                       (guix build utils))
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'rename-exe
+                 (lambda _
+                   (let ((out-bin (string-append #$output "/bin")))
+                     (for-each (lambda (base)
+                                 (rename-file (string-append out-bin "/" base)
+                                              (string-append out-bin "/llama-cpp"
+                                                             (if (string= base "main")
+                                                                 ""
+                                                                 (string-append "-" base)))))
+                               (scandir out-bin
+                                        (lambda (file)
+                                          (not (or (string= file ".")
+                                                   (string= file ".."))))))))))))
+    (home-page "https://github.com/ggerganov/llama.cpp")
+    (synopsis "LLM inference in C/C++")
+    (description "Inference of Meta's LLaMA model (and others) in pure C/C++.")
+    (license license:expat)))
