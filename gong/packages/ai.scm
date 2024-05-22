@@ -4,6 +4,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system gnu)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages maths))
 
@@ -91,4 +92,42 @@
     (home-page "https://github.com/ggerganov/llama.cpp")
     (synopsis "LLM inference in C/C++")
     (description "Inference of Meta's LLaMA model (and others) in pure C/C++.")
+    (license license:expat)))
+
+(define-public whisper.cpp
+  (package
+    (name "whisper.cpp")
+    (version "1.6.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/ggerganov/whisper.cpp")
+             (commit (string-append "v" version))))
+       (sha256
+        (base32 "1bv9rnrjiyswwfwarbp8cxmnpc8fifzz02vxl93w0f74bw2ml1fi"))))
+    (build-system gnu-build-system)
+    (arguments
+     (list #:tests? #f
+           #:phases
+           #~(modify-phases %standard-phases
+               (delete 'configure)
+               (add-before 'build 'set-env
+                 (lambda _
+                   (setenv "CC" (which "gcc"))
+                   (setenv "CXX" (which "g++"))))
+               (replace 'install
+                 (lambda _
+                   (let ((out-bin (string-append #$output "/bin")))
+                     (for-each (lambda (base)
+                                 (install-file base out-bin)
+                                 (rename-file (string-append out-bin "/" base)
+                                              (string-append out-bin "/whisper-cpp"
+                                                             (if (string= base "main")
+                                                                 ""
+                                                                 (string-append "-" base)))))
+                               '("main" "bench" "quantize" "server"))))))))
+    (home-page "https://github.com/ggerganov/whisper.cpp")
+    (synopsis "Port of OpenAI's Whisper model in C/C++")
+    (description "High-performance inference of OpenAI's Whisper automatic speech recognition (ASR) model")
     (license license:expat)))
