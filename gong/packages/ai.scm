@@ -12,7 +12,7 @@
 (define-public chatglm.cpp
   (package
     (name "chatglm.cpp")
-    (version "0.3.2")
+    (version "0.3.3")
     (source
      (origin
        (method git-fetch)
@@ -21,7 +21,7 @@
              (commit (string-append "v" version))
              (recursive? #t)))
        (sha256
-        (base32 "1h4fz64cffbv173v60bdn81hzgxcby97vp1ya6n1i633v41gjawh"))))
+        (base32 "1sq6pwh8823wa6nxpzrnjgpnlwgwclvx3xg058iy8czczwajvq3z"))))
     (build-system cmake-build-system)
     (arguments
      (list #:tests? #f
@@ -32,9 +32,9 @@
                    (substitute* "CMakeLists.txt"
                      (("if \\(CHATGLM_ENABLE_EXAMPLES\\)")
                       "if (CHATGLM_ENABLE_EXAMPLES)
-    add_executable(chatglm-cpp main.cpp)
-    target_link_libraries(chatglm-cpp PRIVATE chatglm)
-    install(TARGETS chatglm-cpp)
+    add_executable(chatglm-cli main.cpp)
+    target_link_libraries(chatglm-cli PRIVATE chatglm)
+    install(TARGETS chatglm-cli)
     set(CMAKE_INSTALL_RPATH \"${CMAKE_INSTALL_PREFIX}/lib\")")
                      (("add_executable\\(main main.cpp\\)")
                       "")
@@ -58,7 +58,7 @@
 (define-public llama.cpp
   (package
     (name "llama.cpp")
-    (version "b2946")
+    (version "b3143")
     (source
      (origin
        (method git-fetch)
@@ -67,28 +67,18 @@
              (commit version)
              (recursive? #t)))
        (sha256
-        (base32 "036nhmcnd50ycqb0j986qfzrxj3qkpnbhbnfh57kzv4gxvxxancc"))))
+        (base32 "0qm9y86yicbwhw350ksb98gky6b1r9k12paqk0wy7j14h1md71f1"))))
     (build-system cmake-build-system)
     (arguments
      (list #:tests? #f
-           #:modules '((ice-9 ftw)
-                       (guix build cmake-build-system)
-                       (guix build utils))
            #:phases
            #~(modify-phases %standard-phases
-               (add-after 'install 'rename-exe
+               (add-after 'install 'remove-test-exe
                  (lambda _
                    (let ((out-bin (string-append #$output "/bin")))
-                     (for-each (lambda (base)
-                                 (rename-file (string-append out-bin "/" base)
-                                              (string-append out-bin "/llama-cpp"
-                                                             (if (string= base "main")
-                                                                 ""
-                                                                 (string-append "-" base)))))
-                               (scandir out-bin
-                                        (lambda (file)
-                                          (not (or (string= file ".")
-                                                   (string= file ".."))))))))))))
+                     (for-each delete-file
+                               (find-files out-bin
+                                           "^test-.*"))))))))
     (home-page "https://github.com/ggerganov/llama.cpp")
     (synopsis "LLM inference in C/C++")
     (description "Inference of Meta's LLaMA model (and others) in pure C/C++.")
@@ -97,7 +87,7 @@
 (define-public whisper.cpp
   (package
     (name "whisper.cpp")
-    (version "1.6.1")
+    (version "1.6.2")
     (source
      (origin
        (method git-fetch)
@@ -105,7 +95,7 @@
              (url "https://github.com/ggerganov/whisper.cpp")
              (commit (string-append "v" version))))
        (sha256
-        (base32 "1bv9rnrjiyswwfwarbp8cxmnpc8fifzz02vxl93w0f74bw2ml1fi"))))
+        (base32 "01q4j602wkvsf9vw0nsazzgvjppf4fhpy90vqnm9affynyxhi0c4"))))
     (build-system gnu-build-system)
     (arguments
      (list #:tests? #f
@@ -122,9 +112,9 @@
                      (for-each (lambda (base)
                                  (install-file base out-bin)
                                  (rename-file (string-append out-bin "/" base)
-                                              (string-append out-bin "/whisper-cpp"
+                                              (string-append out-bin "/whisper"
                                                              (if (string= base "main")
-                                                                 ""
+                                                                 "-cli"
                                                                  (string-append "-" base)))))
                                '("main" "bench" "quantize" "server"))))))))
     (home-page "https://github.com/ggerganov/whisper.cpp")

@@ -13,27 +13,25 @@
 
 
 (define-public uxplay
-  (let ((commit "2c850d0585f056f10aa3be59b6d64ca481853767")
-        (revision "1"))
-    (package
-     (name "uxplay")
-     (version (git-version "1.68.2" revision commit))
-     (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/FDH2/UxPlay")
-                    (commit commit)))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32 "09a1m2akl9yj26jkgfzs5gmkn5krninyvz74qc4fyp5pb4xm655c"))))
-     (build-system cmake-build-system)
-     (arguments `(#:tests? #false))
-     (inputs
-      (list openssl libplist avahi gstreamer gst-plugins-base libx11))
-     (native-inputs
-      (list pkg-config))
-     (home-page "https://github.com/FDH2/UxPlay")
-     (synopsis "AirPlay Unix mirroring server")
-     (description
-      "AirPlay-Mirror and AirPlay-Audio server for Linux, macOS, and Unix (now also runs on Windows).")
-     (license license:gpl3))))
+  (package
+   (name "uxplay")
+   (version "1.68.3")
+   (source (origin
+            (method git-fetch)
+            (uri (git-reference
+                  (url "https://github.com/FDH2/UxPlay")
+                  (commit (string-append "v" version))))
+            (file-name (git-file-name name version))
+            (sha256
+             (base32 "1azh1v6zkgbqwixf079n9zylm5nld2ar999avx8b9k7vimf9bzqj"))))
+   (build-system cmake-build-system)
+   (arguments `(#:tests? #false))
+   (inputs
+    (list openssl libplist avahi gstreamer gst-plugins-base libx11))
+   (native-inputs
+    (list pkg-config))
+   (home-page "https://github.com/FDH2/UxPlay")
+   (synopsis "AirPlay Unix mirroring server")
+   (description
+    "AirPlay-Mirror and AirPlay-Audio server for Linux, macOS, and Unix (now also runs on Windows).")
+   (license license:gpl3)))

@@ -7,11 +7,11 @@
 
 
 (define-public emacs-citre-next
-  (let ((commit "b4977c6a63e9879dac913ca8f9fd6faba44650c2")
+  (let ((commit "7c9c77276cc7dfcb77640df7d589eaac3198cfee")
         (revision "1"))
     (package (inherit emacs-citre)
              (name "emacs-citre-next")
-             (version (git-version "0.4" revision commit))
+             (version (git-version "0.4.1" revision commit))
              (source (origin
                        (method git-fetch)
                        (uri (git-reference
@@ -19,29 +19,7 @@
                              (commit commit)))
                        (file-name (git-file-name name version))
                        (sha256
-                        (base32 "1yvqmq6ydzvyvy5k1yssfmvapl9c7c0im88kqcfacg2k865j32b5")))))))
-
-
-(define-public emacs-goto-line-preview
-  (let ((commit "056bd88d860ce9309ba3d4934d9ec5801121683b")
-        (revision "1"))
-    (package
-     (name "emacs-goto-line-preview")
-     (version (git-version "0.1.1" revision commit))
-     (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/emacs-vs/goto-line-preview")
-                    (commit commit)))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32 "0chjlc3a040bjmgihgr4hb3s6l4x0yicjpafal1cmc88dwshqka0"))))
-     (build-system emacs-build-system)
-     (home-page "https://github.com/emacs-vs/goto-line-preview")
-     (synopsis "Preview line when executing goto-line command")
-     (description
-      "This package makes this better by navigating the line while you are inputting in minibuffer.")
-     (license license:gpl3))))
+                        (base32 "1x5kxlzhzr2x4cszcqaxcg2lc71nwmmfnm2vzx7iz7h74hn4f1ld")))))))
 
 
 (define-public emacs-highlight-parentheses
@@ -67,7 +45,7 @@
 
 
 (define-public emacs-maple-translate
-  (let ((commit "252b9f581b6e08b4c0834bee5a294f1cf90e59ce")
+  (let ((commit "dfd0eae6486d62c26a3fa3fb07ee7e5f4640eb16")
         (revision "1"))
     (package
      (name "emacs-maple-translate")
@@ -79,7 +57,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0bxhy8zcwqgdv80dzrxgccf8xmgd78cvwhqkxqjqdwn507mn1fqj"))))
+               (base32 "13kmgwcp9kha4dqy5ak811m2y1qqp9s23m2r4rrjsjbmaxg7xkwg"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/honmaple/emacs-maple-translate")
      (synopsis "Translate word between chinese and english")
@@ -112,7 +90,7 @@
 
 
 (define-public emacs-pocket-lib
-  (let ((commit "b13c899223a15481738c3105f07ee2205dcc937c")
+  (let ((commit "61b5f9021e0b680174a1c2ac567a7188e2cdb468")
         (revision "1"))
     (package
      (name "emacs-pocket-lib")
@@ -124,7 +102,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0b5451fwsjqb603mmgw6kpd8w4gvndg3fxbdb44ib2245ynr5mms"))))
+               (base32 "02134gnasjmay8nwkzdabivw0jfnb169wgw5cksnhpx8jqd2rjzk"))))
      (build-system emacs-build-system)
      (propagated-inputs
       (list emacs-plz
