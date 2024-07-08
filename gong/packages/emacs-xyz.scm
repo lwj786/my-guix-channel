@@ -2,8 +2,29 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system emacs)
+  #:use-module (guix utils)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (gnu packages emacs-xyz))
+  #:use-module (gnu packages emacs)
+  #:use-module (gnu packages emacs-xyz)
+  #:use-module (gnu packages xorg))
+
+
+(define-public emacs-4me
+  (package
+    (inherit emacs)
+    (name "emacs-4me")
+    (inputs (modify-inputs (package-inputs emacs)
+              (prepend
+               libxrender
+               libxt)))))
+
+(define-public emacs-exwm-4me
+  (package
+    (inherit emacs-exwm)
+    (name "emacs-exwm-4me")
+    (arguments
+     (substitute-keyword-arguments (package-arguments emacs-exwm)
+       ((#:emacs _) emacs-4me)))))
 
 
 (define-public emacs-citre-next
