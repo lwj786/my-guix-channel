@@ -72,7 +72,7 @@
 (define-public llama.cpp
   (package
     (name "llama.cpp")
-    (version "b3353")
+    (version "b3505")
     (source
      (origin
        (method git-fetch)
@@ -80,8 +80,9 @@
              (url "https://github.com/ggerganov/llama.cpp")
              (commit version)
              (recursive? #t)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "0fdf1mxkhaqsgv7hg4rjv333ndcpwljw5n2fsy7l7ymkhxlhi6g5"))))
+        (base32 "1d8hzms87jhvwppybl6nl8c8xmh7mzn25ll7zzfs6yzprgbahsvl"))))
     (build-system cmake-build-system)
     (arguments
      (list #:tests? #f
