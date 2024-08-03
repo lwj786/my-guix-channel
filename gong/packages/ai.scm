@@ -15,8 +15,11 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages serialization)
   #:use-module (gnu packages image-processing)
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages python-build)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages haskell-apps)
+  #:use-module (gnu packages perl)
   #:use-module (gong packages tbb))
 
 
@@ -223,3 +226,88 @@
       (synopsis "YOLOv10 C++ implementation using OpenVINO for efficient and accurate real-time object detection")
       (description "Implementing YOLOv10 object detection using OpenVINO for efficient and accurate real-time inference in C++.")
       (license license:expat))))
+
+
+(define-public paddle
+  (package
+    (name "paddle")
+    (version "2.6.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/PaddlePaddle/Paddle")
+             (commit (string-append "v" version))
+             (recursive? #t)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0pz03b1l8b4kk9l34v2kyqsm4589pmlwjwlphv42a9gh8jhxwcak"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'modify-src
+            (lambda _
+              (substitute* "CMakeLists.txt"
+                (("find_package\\(Git REQUIRED\\)")
+                 ""))
+              (substitute* "cmake/third_party.cmake"
+                (("include\\(external/lapack\\)")
+                 "")
+                (("extern_lapack")
+                 ""))
+              (substitute* "paddle/phi/CMakeLists.txt"
+                (("add_dependencies\\(phi extern_lapack\\)")
+                 ""))
+              (substitute* "paddle/phi/backends/dynload/dynamic_loader.cc"
+                (("FLAGS_lapack_dir")
+                 (string-append "\"" #$lapack "/lib" "\"")))
+              (for-each (lambda (f)
+                          (substitute* f
+                            (("git checkout -- \\. .* patch")
+                             "patch")))
+                        '("cmake/external/gtest.cmake"
+                          "cmake/external/pocketfft.cmake"
+                          "cmake/external/eigen.cmake"
+                          "cmake/external/gloo.cmake"
+                          "cmake/external/pybind11.cmake"
+                          "cmake/external/rocksdb.cmake"))
+              (substitute* "cmake/external/protobuf.cmake"
+                (("PATCH_COMMAND" all)
+                 (string-append all " \"\""))
+                ((".*git checkout.*")
+                 ""))
+              (substitute* "cmake/inference_lib.cmake"
+                (("\\$\\{CMAKE_BINARY_DIR\\}/paddle_inference_(c_)?install_dir")
+                 #$output))
+              (substitute* "cmake/phi_header.cmake"
+                (("\\$\\{CMAKE_BINARY_DIR\\}/paddle_inference_install_dir")
+                 #$output))))
+          (add-before 'build 'set-env
+            (lambda _
+              (setenv "CC" (which "gcc")))))
+      #:configure-flags #~`("-DCMAKE_BUILD_TYPE=Release"
+                            ;; ,(string-append "-DPADDLE_INFERENCE_INSTALL_DIR=" #$output)
+                            ;; ,(string-append "-DPADDLE_INFERENCE_C_INSTALL_DIR=" #$output)
+                            "-DWITH_SETUP_INSTALL=ON"
+                            "-DON_INFER=ON"
+                            "-DWITH_PYTHON=OFF"
+                            "-DWITH_MKL=OFF"
+                            "-DWITH_TESTING=OFF"
+                            "-DWITH_INFERENCE_API_TEST=OFF")))
+    (inputs
+     (list
+      lapack))
+    (native-inputs
+     (list
+      python
+      python-pyyaml
+      python-jinja2
+      python-typing-extensions
+      perl))
+    (home-page "http://www.paddlepaddle.org/")
+    (synopsis "PArallel Distributed Deep LEarning: Machine Learning Framework from Industrial Practice")
+    (description "PaddlePaddle is an industrial platform with advanced technologies and rich features that cover core deep learning frameworks, basic model libraries, end-to-end development kits, tools & components as well as service platforms.")
+    (license license:asl2.0)))
