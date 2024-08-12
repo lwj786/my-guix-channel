@@ -312,3 +312,89 @@
     (synopsis "PArallel Distributed Deep LEarning: Machine Learning Framework from Industrial Practice")
     (description "PaddlePaddle is an industrial platform with advanced technologies and rich features that cover core deep learning frameworks, basic model libraries, end-to-end development kits, tools & components as well as service platforms.")
     (license license:asl2.0)))
+
+(define-public ldoublev-autolog-cpp-header
+  (let ((commit "ba37c37b7d20607e5f675b57a6aa1202c60593e4")
+        (revision "1"))
+    (package
+      (name "ldoublev-autolog-cpp-header")
+      (version (git-version "0.0.0" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (url "https://github.com/LDOUBLEV/AutoLog")
+                      (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32 "1bw17452bb450cy5sxp7iz28hl91vlabys48xr12r9wpm50hsbkb"))))
+      (build-system cmake-build-system)
+      (arguments
+       (list
+        #:tests? #f
+        #:out-of-source? #f
+        #:phases
+        #~(modify-phases %standard-phases
+            (replace 'install
+              (lambda _
+                (let ((out-include (string-append #$output "/include/auto_log")))
+                  (invoke "mkdir" "-p" out-include)
+                  (for-each (lambda (f)
+                              (install-file f out-include))
+                            '("auto_log/autolog.h"
+                              "auto_log/lite_autolog.h"))))))))
+      (home-page "https://github.com/LDOUBLEV/AutoLog")
+      (synopsis "automatic log generation for paddlepaddle")
+      (description "AutoLog includes functions such as automatic timing, statistics of CPU memory, GPU memory and other information, and automatic log generation.")
+      (license license:asl2.0))))
+
+(define-public paddleocr-cpp-infer
+  (package
+    (name "paddleocr-cpp-infer")
+    (version "2.8.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/PaddlePaddle/PaddleOCR")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32 "128911szkdcysjs5amd436p6h8hv3gjhwsgsk3nsnb5hw1pnkcsc"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'modify-src
+            (lambda _
+              (invoke "mv" "deploy/cpp_infer/CMakeLists.txt" ".")
+              (substitute* "CMakeLists.txt"
+                (("share/OpenCV")
+                 "lib/cmake/opencv4")
+                (("include\\(external-cmake/auto-log.cmake\\)")
+                 "")
+                (("\\$\\{FETCHCONTENT_BASE_DIR\\}/extern_autolog-src")
+                 (string-append #$ldoublev-autolog-cpp-header "/include"))
+                (("\\$\\{CMAKE_SOURCE_DIR\\}/" all)
+                 (string-append all "deploy/cpp_infer"))
+                (("./src")
+                 "./deploy/cpp_infer/src")
+                (("-o3")
+                 "-O3"))
+              (invoke "sh" "-c" "echo 'install(TARGETS ${DEMO_NAME})' >> CMakeLists.txt"))))
+      #:configure-flags #~`("-DWITH_MKL=OFF"
+                            "-DWITH_GPU=OFF"
+                            "-DWITH_STATIC_LIB=OFF"
+                            "-DWITH_TENSORRT=OFF"
+                            ,(string-append "-DPADDLE_LIB=" #$paddle)
+                            ,(string-append "-DOPENCV_DIR=" #$opencv))))
+    (inputs
+     (list
+      opencv
+      paddle
+      ldoublev-autolog-cpp-header
+      zlib))
+    (home-page "https://paddlepaddle.github.io/PaddleOCR/")
+    (synopsis "Awesome multilingual OCR toolkits based on PaddlePaddle")
+    (description "PaddleOCR is practical ultra lightweight OCR system, support 80+ languages recognition, provide data annotation and synthesis tools, support training and deployment among server, mobile, embedded and IoT devices.")
+    (license license:asl2.0)))
