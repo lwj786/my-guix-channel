@@ -50,7 +50,7 @@
                        (invoke "go" "env"))))))))
     (inputs
      (list go-github-com-creack-pty
-           go-github-com-google-go-cmp-cmp
+           go-github-com-google-go-cmp
            go-github-com-mattn-go-isatty
            go-github-com-sourcegraph-jsonrpc2
            go-go-etcd-io-bbolt
