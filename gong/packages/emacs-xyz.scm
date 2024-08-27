@@ -43,6 +43,31 @@
                         (base32 "1x5kxlzhzr2x4cszcqaxcg2lc71nwmmfnm2vzx7iz7h74hn4f1ld")))))))
 
 
+(define-public emacs-hass
+  (let ((commit "4c9da37c5217177d43dbd2cb9cd458c01b834c54")
+        (revision "1"))
+    (package
+      (name "emacs-hass")
+      (version (git-version "3.0.2" revision commit))
+      (source (origin
+                (method git-fetch)
+                (uri (git-reference
+                      (url "https://github.com/purplg/hass")
+                      (commit commit)))
+                (file-name (git-file-name name version))
+                (sha256
+                 (base32 "15mrp8ibynlr3fjhgqia9m0fc0jrkj4x9apw6j2dka19cv00vs1m"))))
+      (build-system emacs-build-system)
+      (propagated-inputs
+       (list
+        emacs-request
+        emacs-websocket))
+      (home-page "https://github.com/purplg/hass")
+      (synopsis "An Emacs package for interacting with Home Assistant")
+      (description "hass is an Emacs package that enables integration with Home Assistant. Call Home Assistant services, hook into Home Assistant events, and create convenient dashboards.")
+      (license license:expat))))
+
+
 (define-public emacs-highlight-parentheses
   (let ((commit "965b18dd69eff4457e17c9e84b3cbfdbfca2ddfb")
         (revision "1"))
