@@ -57,6 +57,7 @@
     (requirement '(networking))
     (start #~(make-forkexec-constructor
               (list #$command
+                    "run"
                     "-config"
                     #$config-file)))
     (stop #~(make-kill-destructor)))))
