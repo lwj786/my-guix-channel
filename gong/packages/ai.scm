@@ -26,7 +26,7 @@
 (define-public chatglm.cpp
   (package
     (name "chatglm.cpp")
-    (version "0.3.3")
+    (version "0.4.2")
     (source
      (origin
        (method git-fetch)
@@ -35,7 +35,7 @@
              (commit (string-append "v" version))
              (recursive? #t)))
        (sha256
-        (base32 "1sq6pwh8823wa6nxpzrnjgpnlwgwclvx3xg058iy8czczwajvq3z"))))
+        (base32 "19926yhrj70qzp0x43yrslyn8h49vww6sgz0w0fgp947grdsdb85"))))
     (build-system cmake-build-system)
     (arguments
      (list #:tests? #f
