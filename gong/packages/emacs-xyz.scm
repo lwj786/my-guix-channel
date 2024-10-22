@@ -28,7 +28,7 @@
 
 
 (define-public emacs-citre-next
-  (let ((commit "7c9c77276cc7dfcb77640df7d589eaac3198cfee")
+  (let ((commit "34e9383f5362fb8f26934930a057567f473d8f0e")
         (revision "1"))
     (package (inherit emacs-citre)
              (name "emacs-citre-next")
@@ -40,7 +40,7 @@
                              (commit commit)))
                        (file-name (git-file-name name version))
                        (sha256
-                        (base32 "1x5kxlzhzr2x4cszcqaxcg2lc71nwmmfnm2vzx7iz7h74hn4f1ld")))))))
+                        (base32 "0zydjhp395ka7flayrcpjv9fzmnjz8lx159b27al8hf9cx7j34yi")))))))
 
 
 (define-public emacs-hass
@@ -136,7 +136,7 @@
 
 
 (define-public emacs-pocket-lib
-  (let ((commit "61b5f9021e0b680174a1c2ac567a7188e2cdb468")
+  (let ((commit "f05f80645d8101518eed13b2da81400fe9b50918")
         (revision "1"))
     (package
      (name "emacs-pocket-lib")
@@ -148,7 +148,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "02134gnasjmay8nwkzdabivw0jfnb169wgw5cksnhpx8jqd2rjzk"))))
+               (base32 "141zrc4w1np3a4j5xb0q1fw4xygjj0qg3bgsmrk0mmbdhk3hj6f4"))))
      (build-system emacs-build-system)
      (propagated-inputs
       (list emacs-plz
@@ -162,7 +162,7 @@
      (license license:gpl3))))
 
 (define-public emacs-pocket-reader
-  (let ((commit "cb9f6b108ebd3a67f77fb75d85351ffb3b0bb3d4")
+  (let ((commit "7f55668325fab3dcf1c24b10ee073f7d1df180a3")
         (revision "1"))
     (package
      (name "emacs-pocket-reader")
@@ -174,7 +174,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0d0mfagx43sqrfyshnwm4acvh6h06jl6l11nvppqhb2hdrrdx0ia"))))
+               (base32 "08fxaffdzxr48lixzk7g9b4aaa107vyyws2ghcw0ismqrfhkq8gz"))))
      (build-system emacs-build-system)
      (propagated-inputs
       (list emacs-dash
