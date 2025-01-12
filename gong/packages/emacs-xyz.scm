@@ -11,7 +11,7 @@
 
 (define-public emacs-4me
   (package
-    (inherit emacs)
+    (inherit emacs-next)
     (name "emacs-4me")
     (inputs (modify-inputs (package-inputs emacs)
               (prepend
@@ -28,7 +28,7 @@
 
 
 (define-public emacs-citre-next
-  (let ((commit "34e9383f5362fb8f26934930a057567f473d8f0e")
+  (let ((commit "2c8284d3eb2651b0a27e3bbfe6d278b05b95f79d")
         (revision "1"))
     (package (inherit emacs-citre)
              (name "emacs-citre-next")
@@ -40,7 +40,7 @@
                              (commit commit)))
                        (file-name (git-file-name name version))
                        (sha256
-                        (base32 "0zydjhp395ka7flayrcpjv9fzmnjz8lx159b27al8hf9cx7j34yi")))))))
+                        (base32 "0mpg5aaskwwcpb3pang1jdjgmlbxffcmz5ds4rfimkzp7kc21hs5")))))))
 
 
 (define-public emacs-hass
@@ -91,7 +91,7 @@
 
 
 (define-public emacs-maple-translate
-  (let ((commit "dfd0eae6486d62c26a3fa3fb07ee7e5f4640eb16")
+  (let ((commit "a747cc50ca73b365383e7303cd86304614aec603")
         (revision "1"))
     (package
      (name "emacs-maple-translate")
@@ -103,7 +103,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "13kmgwcp9kha4dqy5ak811m2y1qqp9s23m2r4rrjsjbmaxg7xkwg"))))
+               (base32 "1irs0b76mafpa6k3ibfb6vss4qhby02gkixh1b24cbl90hd5nv95"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/honmaple/emacs-maple-translate")
      (synopsis "Translate word between chinese and english")
@@ -162,7 +162,7 @@
      (license license:gpl3))))
 
 (define-public emacs-pocket-reader
-  (let ((commit "7f55668325fab3dcf1c24b10ee073f7d1df180a3")
+  (let ((commit "d507c376f0edaee475466e4ecdcead4d4184e5aa")
         (revision "1"))
     (package
      (name "emacs-pocket-reader")
@@ -174,7 +174,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "08fxaffdzxr48lixzk7g9b4aaa107vyyws2ghcw0ismqrfhkq8gz"))))
+               (base32 "1hyjs6cp23cy10k7f0fdp4qz21ba0qmb04xmpdjl5wkwl0s5wfw9"))))
      (build-system emacs-build-system)
      (propagated-inputs
       (list emacs-dash

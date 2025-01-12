@@ -23,9 +23,9 @@
   #:use-module (gong packages tbb))
 
 
-(define-public chatglm.cpp
+(define-public chatglm-cpp
   (package
-    (name "chatglm.cpp")
+    (name "chatglm-cpp")
     (version "0.4.2")
     (source
      (origin
@@ -59,83 +59,14 @@
     (description "C++ implementation of ChatGLM-6B, ChatGLM2-6B, ChatGLM3-6B and more LLMs for real-time chatting")
     (license license:expat)))
 
-(define-public chatglm.cpp-openblas
-  (package (inherit chatglm.cpp)
-           (name "chatglm.cpp-openblas")
+(define-public chatglm-cpp-openblas
+  (package (inherit chatglm-cpp)
+           (name "chatglm-cpp-openblas")
            (arguments
-            (substitute-keyword-arguments (package-arguments chatglm.cpp)
+            (substitute-keyword-arguments (package-arguments chatglm-cpp)
               ((#:configure-flags flags '())
                #~(list "-DGGML_OPENBLAS=ON"))))
            (inputs (list openblas))))
-
-
-(define-public llama.cpp
-  (package
-    (name "llama.cpp")
-    (version "b3982")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/ggerganov/llama.cpp")
-             (commit version)
-             (recursive? #t)))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0dmmiy6d6rj1gbwq9nf7ay1z563an3mq337ji8arraddhisjj72a"))))
-    (build-system cmake-build-system)
-    (arguments
-     (list #:tests? #f
-           #:phases
-           #~(modify-phases %standard-phases
-               (add-after 'install 'remove-test-exe
-                 (lambda _
-                   (let ((out-bin (string-append #$output "/bin")))
-                     (for-each delete-file
-                               (find-files out-bin
-                                           "^test-.*"))))))))
-    (home-page "https://github.com/ggerganov/llama.cpp")
-    (synopsis "LLM inference in C/C++")
-    (description "Inference of Meta's LLaMA model (and others) in pure C/C++.")
-    (license license:expat)))
-
-(define-public whisper.cpp
-  (package
-    (name "whisper.cpp")
-    (version "1.6.2")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/ggerganov/whisper.cpp")
-             (commit (string-append "v" version))))
-       (sha256
-        (base32 "01q4j602wkvsf9vw0nsazzgvjppf4fhpy90vqnm9affynyxhi0c4"))))
-    (build-system gnu-build-system)
-    (arguments
-     (list #:tests? #f
-           #:phases
-           #~(modify-phases %standard-phases
-               (delete 'configure)
-               (add-before 'build 'set-env
-                 (lambda _
-                   (setenv "CC" (which "gcc"))
-                   (setenv "CXX" (which "g++"))))
-               (replace 'install
-                 (lambda _
-                   (let ((out-bin (string-append #$output "/bin")))
-                     (for-each (lambda (base)
-                                 (install-file base out-bin)
-                                 (rename-file (string-append out-bin "/" base)
-                                              (string-append out-bin "/whisper"
-                                                             (if (string= base "main")
-                                                                 "-cli"
-                                                                 (string-append "-" base)))))
-                               '("main" "bench" "quantize" "server"))))))))
-    (home-page "https://github.com/ggerganov/whisper.cpp")
-    (synopsis "Port of OpenAI's Whisper model in C/C++")
-    (description "High-performance inference of OpenAI's Whisper automatic speech recognition (ASR) model")
-    (license license:expat)))
 
 
 (define-public openvino
