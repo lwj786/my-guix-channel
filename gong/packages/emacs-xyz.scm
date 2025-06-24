@@ -135,64 +135,6 @@
      (license license:expat))))
 
 
-(define-public emacs-pocket-lib
-  (let ((commit "f05f80645d8101518eed13b2da81400fe9b50918")
-        (revision "1"))
-    (package
-     (name "emacs-pocket-lib")
-     (version (git-version "0.3-pre" revision commit))
-     (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/alphapapa/pocket-lib.el")
-                    (commit commit)))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32 "141zrc4w1np3a4j5xb0q1fw4xygjj0qg3bgsmrk0mmbdhk3hj6f4"))))
-     (build-system emacs-build-system)
-     (propagated-inputs
-      (list emacs-plz
-            emacs-dash
-            emacs-kv
-            emacs-s))
-     (home-page "https://github.com/alphapapa/pocket-lib.el")
-     (synopsis "Emacs client for Pocket reading list (getpocket.com)")
-     (description
-      "This is a client for Pocket (getpocket.com). It allows you to manage your reading list: add, remove, delete, tag, view, favorite, etc.")
-     (license license:gpl3))))
-
-(define-public emacs-pocket-reader
-  (let ((commit "d507c376f0edaee475466e4ecdcead4d4184e5aa")
-        (revision "1"))
-    (package
-     (name "emacs-pocket-reader")
-     (version (git-version "0.4-pre" revision commit))
-     (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/alphapapa/pocket-reader.el")
-                    (commit commit)))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32 "1hyjs6cp23cy10k7f0fdp4qz21ba0qmb04xmpdjl5wkwl0s5wfw9"))))
-     (build-system emacs-build-system)
-     (propagated-inputs
-      (list emacs-dash
-            emacs-kv
-            emacs-ht
-            emacs-ov
-            emacs-peg
-            emacs-s
-            emacs-rainbow-identifiers
-            emacs-org-web-tools
-            emacs-pocket-lib))
-     (home-page "https://github.com/alphapapa/pocket-reader.el")
-     (synopsis " Emacs library for the getpocket.com API")
-     (description
-      "This is a simple library for accessing the getpocket.com API. It should be considered in late alpha/early beta status at the moment.")
-     (license license:gpl3))))
-
-
 (define-public emacs-spacious-padding
   (let ((commit "9d96d301d5bccf192daaf00dba64bca9979dcb5a")
         (revision "1"))
