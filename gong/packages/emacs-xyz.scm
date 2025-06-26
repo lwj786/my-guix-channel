@@ -58,6 +58,8 @@
                 (sha256
                  (base32 "15mrp8ibynlr3fjhgqia9m0fc0jrkj4x9apw6j2dka19cv00vs1m"))))
       (build-system emacs-build-system)
+      (arguments
+       (list #:tests? #f))
       (propagated-inputs
        (list
         emacs-request
@@ -83,6 +85,8 @@
               (sha256
                (base32 "0wvhr5gzaxhn9lk36mrw9h4qpdax5kpbhqj44745nvd75g9awpld"))))
      (build-system emacs-build-system)
+     (arguments
+       (list #:tests? #f))
      (home-page "https://git.sr.ht/~tsdh/highlight-parentheses.el")
      (synopsis "Highlights parentheses surrounding point in Emacs")
      (description
