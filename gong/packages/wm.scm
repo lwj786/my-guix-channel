@@ -2,6 +2,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system meson)
+  #:use-module (guix gexp)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xdisorg)
@@ -37,3 +38,31 @@
     (description "Wayback is a X11 compatibility layer which allows for running full X11
 desktop environments using Wayland components.")
     (license license:expat)))
+
+
+(define-public stumpwm+slynk-on-wayback
+  (package
+    (inherit wayback)
+    (name "stumpwm-with-slynk-on-wayback")
+    (inputs (modify-inputs (package-inputs wayback)
+              (append stumpwm+slynk)))
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'create-desktop-file
+                 (lambda* (#:key outputs #:allow-other-keys)
+                   (let* ((out #$output)
+                          (xwm-out #$stumpwm+slynk)
+                          (wayland-sessions (string-append out "/share/wayland-sessions")))
+                     (mkdir-p wayland-sessions)
+                     (call-with-output-file
+                         (string-append wayland-sessions "/stumpwm-on-wayback.desktop")
+                       (lambda (file)
+                         (format file
+                                 "[Desktop Entry]~@
+                                  Name=stumpwm on wayback~@
+                                  Comment=The Stump Window Manager on Wayback~@
+                                  Exec=~a/bin/wayback-session ~a/bin/stumpwm~@
+                                  Icon=~@
+                                  Type=Application~%"
+                                 out xwm-out)))))))))))
