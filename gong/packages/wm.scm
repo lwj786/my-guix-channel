@@ -3,6 +3,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system meson)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xdisorg)
@@ -42,27 +43,27 @@ desktop environments using Wayland components.")
 
 (define-public stumpwm+slynk-on-wayback
   (package
-    (inherit wayback)
+    (inherit stumpwm+slynk)
     (name "stumpwm-with-slynk-on-wayback")
-    (inputs (modify-inputs (package-inputs wayback)
-              (append stumpwm+slynk)))
+    (propagated-inputs
+     (list wayback))
     (arguments
-     (list #:phases
-           #~(modify-phases %standard-phases
-               (add-after 'install 'create-desktop-file
-                 (lambda* (#:key outputs #:allow-other-keys)
-                   (let* ((out #$output)
-                          (xwm-out #$stumpwm+slynk)
-                          (wayland-sessions (string-append out "/share/wayland-sessions")))
-                     (mkdir-p wayland-sessions)
-                     (call-with-output-file
-                         (string-append wayland-sessions "/stumpwm-on-wayback.desktop")
-                       (lambda (file)
-                         (format file
-                                 "[Desktop Entry]~@
-                                  Name=stumpwm on wayback~@
-                                  Comment=The Stump Window Manager on Wayback~@
-                                  Exec=~a/bin/wayback-session ~a/bin/stumpwm~@
-                                  Icon=~@
-                                  Type=Application~%"
-                                 out xwm-out)))))))))))
+     (substitute-keyword-arguments (package-arguments stumpwm+slynk)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'build-program 'create-desktop-file
+              (lambda* (#:key outputs #:allow-other-keys)
+                (let* ((out #$output)
+                       (wayland-sessions (string-append out "/share/wayland-sessions")))
+                  (mkdir-p wayland-sessions)
+                  (call-with-output-file
+                      (string-append wayland-sessions "/stumpwm-on-wayback.desktop")
+                    (lambda (file)
+                      (format file
+                              "[Desktop Entry]~@
+                               Name=stumpwm on wayback~@
+                               Comment=The Stump Window Manager on Wayback~@
+                               Exec=~a/bin/wayback-session ~a/bin/stumpwm~@
+                               Icon=~@
+                               Type=Application~%"
+                              #$wayback out))))))))))))
