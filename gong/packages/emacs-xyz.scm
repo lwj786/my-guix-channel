@@ -3,10 +3,12 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system emacs)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
-  #:use-module (gnu packages xorg))
+  #:use-module (gnu packages xorg)
+  #:use-module (gong packages wm))
 
 
 (define-public emacs-4me
@@ -22,9 +24,30 @@
   (package
     (inherit emacs-exwm)
     (name "emacs-exwm-4me")
+    (propagated-inputs
+     (modify-inputs (package-propagated-inputs emacs-exwm)
+       (append wayback)))
     (arguments
      (substitute-keyword-arguments (package-arguments emacs-exwm)
-       ((#:emacs _) emacs-4me)))))
+       ((#:emacs _) emacs-4me)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'install-xsession 'install-wayback-session
+              (lambda* (#:key outputs #:allow-other-keys)
+                (let* ((out #$output)
+                       (wayland-sessions (string-append out "/share/wayland-sessions")))
+                  (mkdir-p wayland-sessions)
+                  (call-with-output-file
+                      (string-append wayland-sessions "/exwm-on-wayback.desktop")
+                    (lambda (file)
+                      (format file
+                              "[Desktop Entry]~@
+                               Name=emacs-exwm on wayback~@
+                               Comment=Emacs X windows manager on Wayback~@
+                               Exec=~a/bin/wayback-session ~a/bin/exwm~@
+                               Icon=~@
+                               Type=Application~%"
+                              #$wayback out))))))))))))
 
 
 (define-public emacs-citre-next
