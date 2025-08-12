@@ -15,7 +15,7 @@
 (define-public elvish
   (package
     (name "elvish")
-    (version "0.20.1")
+    (version "0.21.0")
     (source
      (origin
        (method git-fetch)
@@ -23,10 +23,10 @@
              (url "https://github.com/elves/elvish")
              (commit (string-append "v" version))))
        (sha256
-        (base32 "140507p05fmcxn7g3irgzssg5r37vj9dnig3q8q1clhmr3gxgall"))))
+        (base32 "1yrah4xbm8jsmr578676bd0yq1n3dc6ahs0hav6csnl7739jpags"))))
     (build-system go-build-system)
     (arguments
-     (list #:go go-1.21
+     (list #:go go-1.22
            #:install-source? #f
            #:tests? #f
            #:import-path "src.elv.sh"

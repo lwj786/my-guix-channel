@@ -51,7 +51,7 @@
 
 
 (define-public emacs-citre-next
-  (let ((commit "2c8284d3eb2651b0a27e3bbfe6d278b05b95f79d")
+  (let ((commit "3e3c6e539c41c880f9d10ef7424cd0d2adcf3151")
         (revision "1"))
     (package (inherit emacs-citre)
              (name "emacs-citre-next")
@@ -63,7 +63,7 @@
                              (commit commit)))
                        (file-name (git-file-name name version))
                        (sha256
-                        (base32 "0mpg5aaskwwcpb3pang1jdjgmlbxffcmz5ds4rfimkzp7kc21hs5")))))))
+                        (base32 "0p2iifiadxpa2q75zk45gqj8bwa3wx9gcs82p5b303lrzid9mrga")))))))
 
 
 (define-public emacs-hass
@@ -118,7 +118,7 @@
 
 
 (define-public emacs-maple-translate
-  (let ((commit "a747cc50ca73b365383e7303cd86304614aec603")
+  (let ((commit "857eaa1d2fffb606ab6e8139c58886e0eb711db7")
         (revision "1"))
     (package
      (name "emacs-maple-translate")
@@ -130,7 +130,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "1irs0b76mafpa6k3ibfb6vss4qhby02gkixh1b24cbl90hd5nv95"))))
+               (base32 "1srh1n20vdpa5v173a3zvv32iswwdrpa98jmw8sycakc2dp6afbk"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/honmaple/emacs-maple-translate")
      (synopsis "Translate word between chinese and english")

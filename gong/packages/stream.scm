@@ -28,7 +28,7 @@
 (define-public uxplay
   (package
    (name "uxplay")
-   (version "1.68.3")
+   (version "1.72.2")
    (source (origin
             (method git-fetch)
             (uri (git-reference
@@ -36,7 +36,7 @@
                   (commit (string-append "v" version))))
             (file-name (git-file-name name version))
             (sha256
-             (base32 "1azh1v6zkgbqwixf079n9zylm5nld2ar999avx8b9k7vimf9bzqj"))))
+             (base32 "1my76bcdfx5p8fpw6jl22r6j3f6lwccrq3mn747mm50fnrl1lxn5"))))
    (build-system cmake-build-system)
    (arguments `(#:tests? #false))
    (inputs
@@ -50,9 +50,9 @@
    (license license:gpl3)))
 
 
-(define-public sunshine
+(define-public sunshine--
   (package
-    (name "sunshine")
+    (name "sunshine--")
     (version "0.23.1")
     (source (origin
               (method git-fetch)
