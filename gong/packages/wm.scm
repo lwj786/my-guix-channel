@@ -51,7 +51,7 @@ desktop environments using Wayland components.")
      (substitute-keyword-arguments (package-arguments stumpwm+slynk)
        ((#:phases phases)
         #~(modify-phases #$phases
-            (add-after 'build-program 'create-desktop-file
+            (add-after 'build-program 'install-wayback-session
               (lambda* (#:key outputs #:allow-other-keys)
                 (let* ((out #$output)
                        (wayland-sessions (string-append out "/share/wayland-sessions")))
