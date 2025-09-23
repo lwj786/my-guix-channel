@@ -8,6 +8,9 @@
   #:export (tinc-service-type
             tinc-configuration
 
+            dae-service-type
+            dae-configuration
+
             v2ray-service-type
             v2ray-configuration))
 
@@ -37,6 +40,50 @@
     (list (service-extension shepherd-root-service-type
                              tinc-shepherd-service)))
    (description "tinc @acronym{VPN, Virtual Private Network}.")))
+
+
+(define-configuration/no-serialization dae-configuration
+  (command
+   string
+   "Path to dae")
+  (config-file
+   string
+   "Configuration file for dae"))
+
+(define (dae-shepherd-service config)
+  (define command (dae-configuration-command config))
+  (define config-file (dae-configuration-config-file config))
+  (list
+   (shepherd-service
+     (provision '(dae))
+     (documentation "Run then dae.")
+     (requirement '(networking)) ;; mount /sys/fs/bpf
+     (start #~(make-forkexec-constructor
+               (list #$command
+                     "run"
+                     "-c"
+                     #$config-file)))
+     (stop #~(make-kill-destructor))
+     (actions
+      (list
+       (shepherd-action
+         (name 'reload)
+         (documentation "Reload config file without interrupt connections.")
+         (procedure #~(lambda _
+                        (invoke #$command "reload"))))
+       (shepherd-action
+         (name 'suspend)
+         (documentation "Suspend dae, recover it by 'dae reload'.")
+         (procedure #~(lambda _
+                        (invoke #$command "suspend")))))))))
+
+(define dae-service-type
+  (service-type
+    (name 'dae)
+    (extensions
+     (list (service-extension shepherd-root-service-type
+                              dae-shepherd-service)))
+    (description "eBPF-based Linux high-performance transparent proxy solution.")))
 
 
 (define-configuration/no-serialization v2ray-configuration
