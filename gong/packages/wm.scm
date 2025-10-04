@@ -4,6 +4,7 @@
   #:use-module (guix build-system meson)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (guix build utils)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xdisorg)
@@ -11,6 +12,10 @@
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages man))
+
+
+(define %distro-root-directory
+  (@@ (gnu packages) %distro-root-directory))
 
 
 (define-public wayback
@@ -25,7 +30,16 @@
               (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1z9p2naw1ff5g8k990nilzplldr4dqjqlz945nfqwf5vvgbdd5zj"))))
+        (base32 "1z9p2naw1ff5g8k990nilzplldr4dqjqlz945nfqwf5vvgbdd5zj"))
+       (patches (car
+                 (delq '()
+                       (map (lambda (d)
+                              (let ((d (string-append d "/gong/")))
+                                (if (directory-exists? d)
+                                  (find-files d
+                                              "^wayback-0.2-config-tap-set-enabled.patch$")
+                                  '())))
+                            (append %load-path (list %distro-root-directory))))))))
     (build-system meson-build-system)
     (inputs (list wayland
                   wayland-protocols
