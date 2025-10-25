@@ -50,6 +50,47 @@
                               #$wayback out))))))))))))
 
 
+(define-public emacs-acp
+  (package
+    (name "emacs-acp")
+    (version "0.7.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/xenodium/acp.el")
+                     (commit (string-append "v" version))))
+              (sha256
+               (base32 "04sd5qwfd3cgb8anfa7ygs4pjl1k9d0crf033cs3ymhi2lfmiq8i"))
+              (file-name (git-file-name name version))))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/xenodium/acp.el")
+    (synopsis "An ACP (Agent Client Protocol) implementation in Emacs lisp")
+    (description "acp.el implements the Agent Client Protocol (ACP) for Emacs as per agentclientprotocol.com. ACP is a standardized protocol for communicating with LLM agents like Gemini CLI, Claude Code, etc.")
+    (license license:gpl3)))
+
+(define-public emacs-agent-shell
+  (package
+    (name "emacs-agent-shell")
+    (version "0.12.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/xenodium/agent-shell")
+                     (commit (string-append "v" version))))
+              (sha256
+               (base32 "1avhk43hbpdb9mlh29spl278hslc9dvrdzrmy6ay1r3k82wm79q6"))
+              (file-name (git-file-name name version))))
+    (build-system emacs-build-system)
+    (propagated-inputs
+     (list
+      emacs-shell-maker-next
+      emacs-acp))
+    (home-page "https://github.com/xenodium/agent-shell")
+    (synopsis "A native Emacs buffer to interact with LLM agents powered by ACP")
+    (description "A native Emacs shell to interact with LLM agents powered by ACP (Agent Client Protocol). With agent-shell, you can chat with the likes of Gemini CLI, Claude Code, or any other ACP-driven agent.")
+    (license license:gpl3)))
+
+
 (define-public emacs-citre-next
   (let ((commit "3e3c6e539c41c880f9d10ef7424cd0d2adcf3151")
         (revision "1"))
@@ -160,6 +201,21 @@
      (synopsis "Auto hide posframe and set active map")
      (description "This package provides a new function posframe-plus-show, which adds two extra parameters to the origianl posframe-show.")
      (license license:expat))))
+
+
+(define-public emacs-shell-maker-next
+  (package
+    (inherit emacs-shell-maker)
+    (name "emacs-shell-maker-next")
+    (version "0.83.1")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                     (url "https://github.com/xenodium/shell-maker")
+                     (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32 "10was1mbgwrpvqpm0kj6b5q5gcbj9l03an5nnd7z6vz902wcb2rm"))))))
 
 
 (define-public emacs-spacious-padding
