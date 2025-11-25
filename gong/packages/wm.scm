@@ -21,14 +21,14 @@
 (define-public wayback
   (package
     (name "wayback")
-    (version "0.2")
+    (version "0.2-1")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
               (url "https://gitlab.freedesktop.org/wayback/wayback")
-              (commit version)))
-       (file-name (git-file-name name version))
+              (commit "0.2")))
+       (file-name (git-file-name name "0.2"))
        (sha256
         (base32 "1z9p2naw1ff5g8k990nilzplldr4dqjqlz945nfqwf5vvgbdd5zj"))
        (patches (car
@@ -37,7 +37,7 @@
                               (let ((d (string-append d "/gong/")))
                                 (if (directory-exists? d)
                                   (find-files d
-                                              "^wayback-0.2-config-tap-set-enabled.patch$")
+                                              "^wayback-0.2-config-touchpad.patch$")
                                   '())))
                             (append %load-path (list %distro-root-directory))))))))
     (build-system meson-build-system)
