@@ -21,16 +21,16 @@
 (define-public wayback
   (package
     (name "wayback")
-    (version "0.2-1")
+    (version "0.3")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
               (url "https://gitlab.freedesktop.org/wayback/wayback")
-              (commit "0.2")))
-       (file-name (git-file-name name "0.2"))
+              (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1z9p2naw1ff5g8k990nilzplldr4dqjqlz945nfqwf5vvgbdd5zj"))
+        (base32 "1dkja28gl5zph0gbbmncrzz3h1wf2vg76p6l633yib8xw363wzgw"))
        (patches (car
                  (delq '()
                        (map (lambda (d)
