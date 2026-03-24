@@ -13,7 +13,7 @@
 
 (define-public emacs-4me
   (package
-    (inherit emacs-next)
+    (inherit emacs)
     (name "emacs-4me")
     (inputs (modify-inputs (package-inputs emacs)
               (prepend
@@ -50,53 +50,12 @@
                               #$wayback out))))))))))))
 
 
-(define-public emacs-acp
-  (package
-    (name "emacs-acp")
-    (version "0.7.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/xenodium/acp.el")
-                     (commit (string-append "v" version))))
-              (sha256
-               (base32 "04sd5qwfd3cgb8anfa7ygs4pjl1k9d0crf033cs3ymhi2lfmiq8i"))
-              (file-name (git-file-name name version))))
-    (build-system emacs-build-system)
-    (home-page "https://github.com/xenodium/acp.el")
-    (synopsis "An ACP (Agent Client Protocol) implementation in Emacs lisp")
-    (description "acp.el implements the Agent Client Protocol (ACP) for Emacs as per agentclientprotocol.com. ACP is a standardized protocol for communicating with LLM agents like Gemini CLI, Claude Code, etc.")
-    (license license:gpl3)))
-
-(define-public emacs-agent-shell
-  (package
-    (name "emacs-agent-shell")
-    (version "0.12.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/xenodium/agent-shell")
-                     (commit (string-append "v" version))))
-              (sha256
-               (base32 "1avhk43hbpdb9mlh29spl278hslc9dvrdzrmy6ay1r3k82wm79q6"))
-              (file-name (git-file-name name version))))
-    (build-system emacs-build-system)
-    (propagated-inputs
-     (list
-      emacs-shell-maker-next
-      emacs-acp))
-    (home-page "https://github.com/xenodium/agent-shell")
-    (synopsis "A native Emacs buffer to interact with LLM agents powered by ACP")
-    (description "A native Emacs shell to interact with LLM agents powered by ACP (Agent Client Protocol). With agent-shell, you can chat with the likes of Gemini CLI, Claude Code, or any other ACP-driven agent.")
-    (license license:gpl3)))
-
-
 (define-public emacs-citre-next
-  (let ((commit "3e3c6e539c41c880f9d10ef7424cd0d2adcf3151")
+  (let ((commit "72375aac87cb245b4f49a4737456f626091a0a42")
         (revision "1"))
     (package (inherit emacs-citre)
              (name "emacs-citre-next")
-             (version (git-version "0.4.1" revision commit))
+             (version (git-version "0.4.2" revision commit))
              (source (origin
                        (method git-fetch)
                        (uri (git-reference
@@ -104,7 +63,7 @@
                              (commit commit)))
                        (file-name (git-file-name name version))
                        (sha256
-                        (base32 "0p2iifiadxpa2q75zk45gqj8bwa3wx9gcs82p5b303lrzid9mrga")))))))
+                        (base32 "0gslc3xqdbwjyb0rci1877ihinp8zlvjgf7maxbbmdgjgqpdlmwh")))))))
 
 
 (define-public emacs-hass
@@ -159,7 +118,7 @@
 
 
 (define-public emacs-maple-translate
-  (let ((commit "857eaa1d2fffb606ab6e8139c58886e0eb711db7")
+  (let ((commit "999ed92ff256b70cc3d12a43d331429c87196afc")
         (revision "1"))
     (package
      (name "emacs-maple-translate")
@@ -171,7 +130,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "1srh1n20vdpa5v173a3zvv32iswwdrpa98jmw8sycakc2dp6afbk"))))
+               (base32 "0wb5jhm281l85iz26zxkzp6vaim6xk3lpr7sx419c5vzh6g4j847"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/honmaple/emacs-maple-translate")
      (synopsis "Translate word between chinese and english")
@@ -201,21 +160,6 @@
      (synopsis "Auto hide posframe and set active map")
      (description "This package provides a new function posframe-plus-show, which adds two extra parameters to the origianl posframe-show.")
      (license license:expat))))
-
-
-(define-public emacs-shell-maker-next
-  (package
-    (inherit emacs-shell-maker)
-    (name "emacs-shell-maker-next")
-    (version "0.83.1")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                     (url "https://github.com/xenodium/shell-maker")
-                     (commit (string-append "v" version))))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32 "10was1mbgwrpvqpm0kj6b5q5gcbj9l03an5nnd7z6vz902wcb2rm"))))))
 
 
 (define-public emacs-spacious-padding
