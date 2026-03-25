@@ -19,40 +19,42 @@
 
 
 (define-public wayback
-  (package
-    (name "wayback")
-    (version "0.3")
-    (source
-     (origin
+  (let ((commit "87361fafecc88aae650d1f9d9af346c8fa21f28e")
+        (revision "1"))
+    (package
+     (name "wayback")
+     (version (git-version "0.3" revision commit))
+     (source
+      (origin
        (method git-fetch)
        (uri (git-reference
-              (url "https://gitlab.freedesktop.org/wayback/wayback")
-              (commit version)))
+             (url "https://gitlab.freedesktop.org/wayback/wayback")
+             (commit commit)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1dkja28gl5zph0gbbmncrzz3h1wf2vg76p6l633yib8xw363wzgw"))
+        (base32 "19vfy1528b5kcvn07hniw92l19msaxkl4mgnq3yq6i300aqgbh6i"))
        (patches (car
                  (delq '()
                        (map (lambda (d)
                               (let ((d (string-append d "/gong/")))
                                 (if (directory-exists? d)
-                                  (find-files d
-                                              "^wayback-0.2-config-touchpad.patch$")
-                                  '())))
+                                    (find-files d
+                                                "^wayback-0.2-config-touchpad.patch$")
+                                    '())))
                             (append %load-path (list %distro-root-directory))))))))
-    (build-system meson-build-system)
-    (inputs (list wayland
-                  wayland-protocols
-                  libxkbcommon
-                  wlroots
-                  xorg-server-xwayland))
-    (native-inputs (list pkg-config
-                         scdoc))
-    (home-page "https://wayback.freedesktop.org")
-    (synopsis "X11 compatibility layer leveraging wlroots and Xwayland")
-    (description "Wayback is a X11 compatibility layer which allows for running full X11
+     (build-system meson-build-system)
+     (inputs (list wayland
+                   wayland-protocols
+                   libxkbcommon
+                   wlroots
+                   xorg-server-xwayland))
+     (native-inputs (list pkg-config
+                          scdoc))
+     (home-page "https://wayback.freedesktop.org")
+     (synopsis "X11 compatibility layer leveraging wlroots and Xwayland")
+     (description "Wayback is a X11 compatibility layer which allows for running full X11
 desktop environments using Wayland components.")
-    (license license:expat)))
+     (license license:expat))))
 
 
 (define-public stumpwm+slynk-on-wayback
@@ -77,7 +79,7 @@ desktop environments using Wayland components.")
                               "[Desktop Entry]~@
                                Name=stumpwm on wayback~@
                                Comment=The Stump Window Manager on Wayback~@
-                               Exec=~a/bin/wayback-session ~a/bin/stumpwm~@
+                               Exec=~a/bin/wayback-session -sesscmd ~a/bin/stumpwm~@
                                Icon=~@
                                Type=Application~%"
                               #$wayback out))))))))))))

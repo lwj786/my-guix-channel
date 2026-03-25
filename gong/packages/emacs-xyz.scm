@@ -44,7 +44,7 @@
                               "[Desktop Entry]~@
                                Name=emacs-exwm on wayback~@
                                Comment=Emacs X windows manager on Wayback~@
-                               Exec=~a/bin/wayback-session ~a/bin/exwm~@
+                               Exec=~a/bin/wayback-session -sesscmd ~a/bin/exwm~@
                                Icon=~@
                                Type=Application~%"
                               #$wayback out))))))))))))
