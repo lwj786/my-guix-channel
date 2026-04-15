@@ -184,6 +184,28 @@
      (license license:gpl3))))
 
 
+(define-public emacs-popterm
+  (let ((commit "7cf2c6cc29171e354294ed359d2404e13ee33962")
+        (revision "1"))
+    (package
+     (name "emacs-popterm")
+     (version (git-version "1.0.0" revision commit))
+     (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/CsBigDataHub/popterm.el")
+                    (commit commit)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32 "0ymfxzci2wy6w8jclhhzxzqwffgbcx37xflgnvswifaim1n1gnmv"))))
+     (build-system emacs-build-system)
+     (home-page "https://github.com/CsBigDataHub/popterm.el")
+     (synopsis "A smart, posframe-based terminal toggler for Emacs")
+     (description
+      "popterm merges the best paradigms of modern Emacs terminal management into a single package.")
+     (license license:gpl3))))
+
+
 (define-public emacs-wolfram
   (let ((commit "743c92f88bb3b6a77bc84ac2221adc6222cebb94")
         (revision "1"))
