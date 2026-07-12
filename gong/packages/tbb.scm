@@ -10,7 +10,7 @@
 
 (define-public hwloc-211
   (package
-    (inherit hwloc-2)
+    (inherit hwloc)
     (name "hwloc-211")
     (version "2.11.2")
     (source (origin
