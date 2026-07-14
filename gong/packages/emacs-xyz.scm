@@ -66,6 +66,33 @@
                         (base32 "0gslc3xqdbwjyb0rci1877ihinp8zlvjgf7maxbbmdgjgqpdlmwh")))))))
 
 
+(define-public emacs-ghostel
+  (package
+   (name "emacs-ghostel")
+   (version "0.44.0")
+   (source (origin
+            (method git-fetch)
+            (uri (git-reference
+                  (url "https://github.com/dakra/ghostel")
+                  (commit (string-append "v" version))))
+            (file-name (git-file-name name version))
+            (sha256
+             (base32 "1fyqpbpv62hs3hqai1j04x30miwdqkkpqfxdh4vbxc331fhrj4dx"))))
+   (build-system emacs-build-system)
+   (arguments
+    (list #:lisp-directory "lisp"
+          #:phases
+          #~(modify-phases %standard-phases
+                           (delete 'patch-el-files)
+                           (add-after 'build 'install-extra
+                                      (lambda _
+                                        (copy-recursively ".." (string-append #$output "/share/emacs/site-lisp/ghostel-" #$version)))))))
+   (home-page "https://dakra.github.io/ghostel/")
+   (synopsis "Terminal emulator powered by libghostty")
+   (description "Ghostel is a terminal emulator for Emacs powered by libghostty-vt, the VT engine behind the Ghostty terminal.")
+   (license license:gpl3)))
+
+
 (define-public emacs-hass
   (let ((commit "4c9da37c5217177d43dbd2cb9cd458c01b834c54")
         (revision "1"))
