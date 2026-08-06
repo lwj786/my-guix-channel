@@ -8,6 +8,9 @@
   #:export (tinc-service-type
             tinc-configuration
 
+            tailscale-service-type
+            tailscale-configuration
+
             dae-service-type
             dae-configuration
 
@@ -40,6 +43,34 @@
     (list (service-extension shepherd-root-service-type
                              tinc-shepherd-service)))
    (description "tinc @acronym{VPN, Virtual Private Network}.")))
+
+
+(define-configuration/no-serialization tailscale-configuration
+  (tailscaled
+   string
+   "Path to tailscaled"))
+
+(define (tailscale-shepherd-service config)
+  (define tailscaled (tailscale-configuration-tailscaled config))
+  (list
+   (shepherd-service
+    (provision '(tailscale))
+    (documentation "Run the tailscaled.")
+    (requirement '(networking))
+    (start #~(make-forkexec-constructor
+              (list #$tailscaled)))
+    (stop #~(let ((kill (make-kill-destructor)))
+              (lambda (process)
+                (kill process)
+                (invoke #$tailscaled "--cleanup")))))))
+
+(define tailscale-service-type
+  (service-type
+   (name 'tailscale)
+   (extensions
+    (list (service-extension shepherd-root-service-type
+                             tailscale-shepherd-service)))
+   (description "tailscale @acronym{VPN, Virtual Private Network}.")))
 
 
 (define-configuration/no-serialization dae-configuration
