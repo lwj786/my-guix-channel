@@ -11,25 +11,25 @@
   #:use-module (gong packages wm))
 
 
-(define-public emacs-4me
+(define-public emacs+
   (package
     (inherit emacs)
-    (name "emacs-4me")
+    (name "emacsX")
     (inputs (modify-inputs (package-inputs emacs)
               (prepend
                libxrender
                libxt)))))
 
-(define-public emacs-exwm-4me
+(define-public emacs-exwm+
   (package
     (inherit emacs-exwm)
-    (name "emacs-exwm-4me")
+    (name "emacs-exwmX")
     (propagated-inputs
      (modify-inputs (package-propagated-inputs emacs-exwm)
        (append wayback)))
     (arguments
      (substitute-keyword-arguments (package-arguments emacs-exwm)
-       ((#:emacs _) emacs-4me)
+       ((#:emacs _) emacs+)
        ((#:phases phases)
         #~(modify-phases #$phases
             (add-after 'install-xsession 'install-wayback-session
@@ -51,7 +51,7 @@
 
 
 (define-public emacs-citre-next
-  (let ((commit "72375aac87cb245b4f49a4737456f626091a0a42")
+  (let ((commit "be0d9c6dc9b1ac67d76fc7ed315f2369d5c3bde8")
         (revision "1"))
     (package (inherit emacs-citre)
              (name "emacs-citre-next")
@@ -63,13 +63,13 @@
                              (commit commit)))
                        (file-name (git-file-name name version))
                        (sha256
-                        (base32 "0gslc3xqdbwjyb0rci1877ihinp8zlvjgf7maxbbmdgjgqpdlmwh")))))))
+                        (base32 "1zgkbx9slm2kgcxjarvjxq01j00v6xggiixvsvxnacy7pqm23s66")))))))
 
 
 (define-public emacs-ghostel
   (package
    (name "emacs-ghostel")
-   (version "0.44.0")
+   (version "0.51.0")
    (source (origin
             (method git-fetch)
             (uri (git-reference
@@ -77,7 +77,7 @@
                   (commit (string-append "v" version))))
             (file-name (git-file-name name version))
             (sha256
-             (base32 "1fyqpbpv62hs3hqai1j04x30miwdqkkpqfxdh4vbxc331fhrj4dx"))))
+             (base32 "06mk8005dm9amjcw487xbxqs3gxdy12fk6hf90p15n58ikkrhm3b"))))
    (build-system emacs-build-system)
    (arguments
     (list #:lisp-directory "lisp"
@@ -212,7 +212,7 @@
 
 
 (define-public emacs-popterm
-  (let ((commit "7cf2c6cc29171e354294ed359d2404e13ee33962")
+  (let ((commit "90c3ace5f00f6388473c8f02f10b3e450db05803")
         (revision "1"))
     (package
      (name "emacs-popterm")
@@ -224,7 +224,7 @@
                     (commit commit)))
               (file-name (git-file-name name version))
               (sha256
-               (base32 "0ymfxzci2wy6w8jclhhzxzqwffgbcx37xflgnvswifaim1n1gnmv"))))
+               (base32 "1b5qjqph4k3z4bq1lb2gn9096kkhrslm5vmbsrxk35nbri4i6693"))))
      (build-system emacs-build-system)
      (home-page "https://github.com/CsBigDataHub/popterm.el")
      (synopsis "A smart, posframe-based terminal toggler for Emacs")
