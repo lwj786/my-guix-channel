@@ -5,7 +5,7 @@
   #:use-module (guix build-system cmake)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages libusb)
-  #:use-module (gnu packages avahi)
+  #:use-module (gnu packages dns)
   #:use-module (gnu packages gstreamer)
   #:use-module (gnu packages libusb)
   #:use-module (gnu packages xorg)

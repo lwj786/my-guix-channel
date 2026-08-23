@@ -8,7 +8,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xdisorg)
-  #:use-module (gnu packages wm)
+  #:use-module (gnu packages window-management)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages man))
