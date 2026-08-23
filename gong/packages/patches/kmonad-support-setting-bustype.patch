@@ -1,0 +1,109 @@
+diff --git a/c_src/keyio.c b/c_src/keyio.c
+index 5a6b6be..6912b4d 100644
+--- a/c_src/keyio.c
++++ b/c_src/keyio.c
+@@ -13,7 +13,7 @@ int ioctl_keyboard(int fd, int grab) {
+ }
+ 
+ // Acquire a file descriptor as a uinput keyboard
+-int acquire_uinput_keysink(int fd, char *name, int vendor, int product, int version) {
++int acquire_uinput_keysink(int fd, char *name, char *bustype, int vendor, int product, int version) {
+ 
+   // Designate fd as a keyboard of all keys
+   ioctl(fd, UI_SET_EVBIT, EV_KEY);
+@@ -27,7 +27,13 @@ int acquire_uinput_keysink(int fd, char *name, int vendor, int product, int vers
+   // Set the vendor details
+   struct uinput_setup usetup;
+   memset(&usetup, 0, sizeof(usetup));
++
+   usetup.id.bustype = BUS_USB;
++  if (!strcmp("I8042", bustype))
++    usetup.id.bustype = BUS_I8042;
++  else if (!strcmp("VIRTUAL", bustype))
++    usetup.id.bustype = BUS_VIRTUAL;
++
+   usetup.id.vendor = vendor;
+   usetup.id.product = product;
+   usetup.id.version = version;
+diff --git a/src/KMonad/Args/Joiner.hs b/src/KMonad/Args/Joiner.hs
+index 33f78d6..d0fb092 100644
+--- a/src/KMonad/Args/Joiner.hs
++++ b/src/KMonad/Args/Joiner.hs
+@@ -296,9 +296,11 @@ pickInput (KIOKitSource _)    = throwError $ InvalidOS "IOKitSource"
+ 
+ -- | The Linux correspondence between OToken and actual code
+ pickOutput :: OToken -> J (LogFunc -> IO (Acquire KeySink))
+-pickOutput (KUinputSink t init) = pure $ runLF (uinputSink cfg)
++pickOutput (KUinputSink t bt init) = pure $ runLF (uinputSink cfg)
+   where cfg = defUinputCfg { _keyboardName = T.unpack t
+-                           , _postInit     = T.unpack <$> init }
++                           , _busType      = T.unpack bt -- To break, or not to break: that is the question.
++                           , _postInit     = T.unpack <$> init
++                           }
+ pickOutput (KSendEventSink _)   = throwError $ InvalidOS "SendEventSink"
+ pickOutput KKextSink            = throwError $ InvalidOS "KextSink"
+ 
+diff --git a/src/KMonad/Args/Parser.hs b/src/KMonad/Args/Parser.hs
+index aab0eb5..593b8df 100644
+--- a/src/KMonad/Args/Parser.hs
++++ b/src/KMonad/Args/Parser.hs
+@@ -353,7 +353,7 @@ otokenP = mkTokenP otokens
+ -- | Output tokens to parse; the format is @(keyword, how to parse the token)@
+ otokens :: [(Text, Parser OToken)]
+ otokens =
+-  [ ("uinput-sink"    , KUinputSink <$> textP <*> optional textP)
++  [ ("uinput-sink"    , KUinputSink <$> textP <*> textP <*> optional textP)
+   , ("send-event-sink", KSendEventSink <$> optional ((,) <$> numP <*> numP))
+   , ("kext"           , pure KKextSink)
+   ]
+diff --git a/src/KMonad/Args/Types.hs b/src/KMonad/Args/Types.hs
+index 93dfa01..fc2601c 100644
+--- a/src/KMonad/Args/Types.hs
++++ b/src/KMonad/Args/Types.hs
+@@ -177,7 +177,7 @@ data IToken
+ 
+ -- | All different output-tokens KMonad can take
+ data OToken
+-  = KUinputSink Text (Maybe Text)
++  = KUinputSink Text Text (Maybe Text)
+   | KSendEventSink (Maybe (Int, Int))
+   | KKextSink
+   deriving (Show)
+diff --git a/src/KMonad/Keyboard/IO/Linux/UinputSink.hs b/src/KMonad/Keyboard/IO/Linux/UinputSink.hs
+index 4944083..0b816a4 100644
+--- a/src/KMonad/Keyboard/IO/Linux/UinputSink.hs
++++ b/src/KMonad/Keyboard/IO/Linux/UinputSink.hs
+@@ -72,6 +72,7 @@ data UinputCfg = UinputCfg
+   , _productCode    :: !CInt
+   , _productVersion :: !CInt
+   , _keyboardName   :: !String
++  , _busType        :: !String
+   , _postInit       :: !(Maybe String)
+   } deriving (Eq, Show)
+ makeClassy ''UinputCfg
+@@ -83,6 +84,7 @@ defUinputCfg = UinputCfg
+   , _productCode    = 0x5679
+   , _productVersion = 0x0000
+   , _keyboardName   = "KMonad simulated keyboard"
++  , _busType        = "USB" -- USB, VIRTUAL, I8042
+   , _postInit       = Nothing
+   }
+ 
+@@ -104,6 +106,7 @@ foreign import ccall "acquire_uinput_keysink"
+   c_acquire_uinput_keysink
+     :: CInt    -- ^ Posix handle to the file to open
+     -> CString -- ^ Name to give to the keyboard
++    -> CString -- ^ Type of Bus
+     -> CInt    -- ^ Vendor ID
+     -> CInt    -- ^ Product ID
+     -> CInt    -- ^ Version ID
+@@ -119,7 +122,9 @@ foreign import ccall "send_event"
+ acquire_uinput_keysink :: MonadIO m => Fd -> UinputCfg -> m Int
+ acquire_uinput_keysink (Fd h) c = liftIO $ do
+   cstr <- newCString $ c^.keyboardName
++  cstr_bt <- newCString $ c^.busType
+   c_acquire_uinput_keysink h cstr
++    cstr_bt
+     (c^.vendorCode) (c^.productCode) (c^.productVersion)
+ 
+ -- | Release a Uinput device
