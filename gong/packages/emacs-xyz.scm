@@ -8,6 +8,7 @@
   #:use-module (gnu packages emacs)
   #:use-module (gnu packages emacs-xyz)
   #:use-module (gnu packages xorg)
+  #:use-module (gnu packages webkit)
   #:use-module (gong packages wm))
 
 
@@ -15,10 +16,32 @@
   (package
     (inherit emacs)
     (name "emacsX")
+    (arguments
+     (substitute-keyword-arguments arguments
+       ((#:configure-flags flags #~'())
+        #~(cons* "--with-xwidgets" #$flags))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'update-webkitgtk-version
+              (lambda _
+                (substitute* "configure.ac"
+                  (("WEBKIT_BROKEN=.*")
+                   "WEBKIT_BROKEN=2.51"))))
+            (add-after 'wrap-emacs-paths 'fix-webkit-crash
+              (lambda _
+                (let ((progs (find-files (string-append #$output "/bin")
+                                         "^emacs(-[0-9]+(\\.[0-9]+)*)?$")))
+                  (for-each
+                   (lambda (prog)
+                     (wrap-program prog
+                       '("WEBKIT_DISABLE_DMABUF_RENDERER" ":" = ("1"))))
+                   progs))))))))
     (inputs (modify-inputs (package-inputs emacs)
               (prepend
                libxrender
-               libxt)))))
+               libxt
+
+               webkitgtk-for-gtk3)))))
 
 (define-public emacs-exwm+
   (package
